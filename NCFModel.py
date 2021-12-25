@@ -13,10 +13,10 @@ from ncf_singlenode import NCF
 
 DEFAULT_USER_COLUMNS = ["userID", "age", "gender", "occupation", "zip-code"]
 DEFAULT_MOVIE_COLUMNS = ['itemID', 'movie_title', 'release_date', 'date',
-                     'url', 'unknown', 'Action', 'Adventure', 'Animation',
-                     'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy',
-                     'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi',
-                     'Thriller', 'War', 'Western']
+                         'url', 'unknown', 'Action', 'Adventure', 'Animation',
+                         'Children', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy',
+                         'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi',
+                         'Thriller', 'War', 'Western']
 
 
 class NCFModel:
@@ -25,7 +25,8 @@ class NCFModel:
         self.train_data['timestamp'] = self.train_data['timestamp'].apply(lambda x: datetime.datetime.fromtimestamp(x))
 
         self.data = Dataset(train=self.train_data, seed=DEFAULT_SEED)
-        self.item_data = pd.read_csv('data/ml-100k/u.item', encoding='cp1252', delimiter='|', names=DEFAULT_MOVIE_COLUMNS)
+        self.item_data = pd.read_csv('data/ml-100k/u.item', encoding='cp1252', delimiter='|',
+                                     names=DEFAULT_MOVIE_COLUMNS)
         self.user_data = pd.read_csv('data/ml-100k/u.user', delimiter='|', names=DEFAULT_USER_COLUMNS)
 
         movie_columns = DEFAULT_MOVIE_COLUMNS
@@ -59,5 +60,3 @@ class NCFModel:
 
         predictions = dict(sorted(predictions.items(), key=lambda x: x[1]))
         return reversed(list(predictions.items())[-limit:])
-
-

@@ -8,7 +8,7 @@ import tf_slim as slim
 from time import time
 import logging
 
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 tf.compat.v1.disable_eager_execution()
 logger = logging.getLogger(__name__)
 MODEL_CHECKPOINT = "model.ckpt"
@@ -82,10 +82,10 @@ class NCF:
         # create ncf model
         self._create_model()
         # set GPU use with demand growth
-        gpu_options = tf.compat.v1.GPUOptions(allow_growth=True)
+        # gpu_options = tf.compat.v1.GPUOptions(allow_growth=False)
         # set TF Session
         self.sess = tf.compat.v1.Session(
-            config=tf.compat.v1.ConfigProto(gpu_options=gpu_options)
+            # config=tf.compat.v1.ConfigProto(gpu_options=gpu_options)
         )
         # parameters initialization
         self.sess.run(tf.compat.v1.global_variables_initializer())

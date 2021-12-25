@@ -8,7 +8,7 @@ import streamlit as st
 import pandas as pd
 import base64
 import numpy as np
-from PIL import Image
+import PIL.Image as Image
 import requests
 import io
 from NCFModel import NCFModel

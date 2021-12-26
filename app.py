@@ -205,10 +205,11 @@ isShowImage = st.sidebar.checkbox('Show Movie Image')
 
 st.header("Applying model for Recommendation")
 st.write("Use recommendation option in sidebar to see the model working ")
+st.subheader("Recommendation for User: #"+selected_user)
 for i, (itemID, value) in enumerate(recommendations):
     # urls = [urllib.parse.unquote(url.replace("http://us.imdb.com/M/title-exact?", "")) for url in item_data[item_data['itemID'] == itemID]['url'].tolist()]
     title = item_data[item_data['itemID'] == itemID]['movie_title'].tolist()[0]
-    st.header(str(i + 1) + ". " + title)
+    st.subheader(str(i + 1) + ". " + title)
     st.markdown(f"""
         * **Predict Rating:** {str(round(float(value) * 5, 3)) + "/5"}
         * **MovieID:** {itemID}

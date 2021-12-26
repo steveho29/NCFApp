@@ -16,6 +16,9 @@ from NCFModel import NCFModel
 
 model = NCFModel()
 
+st.set_page_config(
+        page_title="Group 8 - NCF",
+    )
 
 st.title('Group 8')
 st.markdown("""

@@ -166,7 +166,9 @@ mlp_error = np.load("Error_mlp.npy")
 st.subheader("MLP Model")
 st.write('MLP Model training loss\'s really weird (is a line) but NeuMF is still correct')
 st.line_chart(pd.DataFrame(np.array([mlp_error]).T, columns=["MLP"]))
-st.write('GMF & NEUMF Model has the training loss convergence (exactly same as paper')
+
+st.subheader("NeuMF & GMF Model")
+st.write('NeuMF & GMF Model has the training loss convergence (exactly same as paper')
 st.line_chart(pd.DataFrame(np.array([gmf_error, neumf_error]).T, columns=["GMF", "NeuMF"]))
 
 st.header("Evaluation Metrics")

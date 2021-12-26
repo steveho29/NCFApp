@@ -197,18 +197,15 @@ for i, (itemID, value) in enumerate(recommendations):
         * **MovieID:** {itemID}
         """)
     if isShowImage:
-        search_res = get_title_id(title)
-        if not search_res:
-            pass
-        else:
-            try:
+        try:
+            search_res = get_title_id(title)
+            if search_res:
                 id, info = search_res
                 info.update(get_film_info(id))
                 info["Plot"] = get_plot(id)
                 st.image(getImage(info["Image"]), width=200)
                 st.write(info)
-            except:
-                st.write("IMDB server search not found!")
-                pass
+        except:
+            st.write("IMDB server search not found!")
 
 

@@ -17,6 +17,12 @@ model = NCFModel()
 
 
 st.title('Group 8')
+st.markdown("""
+* 19127368 - Hồ Ngọc Minh Đức
+* 19127353 - Lê Tấn Đạt
+* 19127429 - Trần Tuấn Kha
+* 19127651 - Trần Anh Túc
+""")
 st.title('Recommender System')
 st.title('Neural Collaborative Filtering')
 st.markdown("""
@@ -44,15 +50,13 @@ def get_title_id(keyword):
     response = requests.request("GET", url, headers=headers, params=querystring)
     data = response.json()
     # get the title id
-    try:
-        first_index = data["results"][0]
-        id = first_index["id"]
-        image_url = first_index["image"]["url"]
-        name = first_index["title"]
-        info = {"Name": name, "Image": image_url}
-        return id.strip('/').split('/')[1], info
-    except:
-        return False
+    first_index = data["results"][0]
+    id = first_index["id"]
+    image_url = first_index["image"]["url"]
+    name = first_index["title"]
+    info = {"Name": name, "Image": image_url}
+    return id.strip('/').split('/')[1], info
+
 
 
 def get_film_info(title_id):
@@ -70,20 +74,16 @@ def get_film_info(title_id):
     data = response.json()
     info = {"Actors": [], "Writers": [], "Directors": []}
 
-    try :
-        # get actors
-        for actor in data["cast"][0:3]:
-            info["Actors"].append(actor["name"])
-        # get writers
-        for writer in data["crew"]["writer"]:
-            info["Writers"].append(writer["name"])
-            if len(info["Writers"]) == 3:
-                break
-        info["Directors"].append(data["crew"]["director"][0]["name"])
-    except:
-        pass
-
+    # get actors
+    for actor in data["cast"][0:3]:
+        info["Actors"].append(actor["name"])
+    # get writers
+    for writer in data["crew"]["writer"]:
+        info["Writers"].append(writer["name"])
+        if len(info["Writers"]) == 3:
+            break
     # get directors
+    info["Directors"].append(data["crew"]["director"][0]["name"])
 
     return info
 

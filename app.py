@@ -32,6 +32,7 @@ This projects use Movielens 100K dataset!
 * **Python libraries:** base64, pandas, streamlit, numpy, ...
 * **Paper Source:** [paperswithcode.com](https://paperswithcode.com/paper/neural-collaborative-filtering)
 * **Model reference:** [github.com/microsoft](https://github.com/microsoft/recommenders)
+* **Source Code: ** [github.com/MinhDuc]https://github.com/steveho29/NCFApp
 """)
 
 st.sidebar.header('Filter Dataset')

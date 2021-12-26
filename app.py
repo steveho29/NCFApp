@@ -148,6 +148,10 @@ st.write('Data Dimension: ' + str(df_train_data_selected.shape[0]) + ' rows and 
 des = train_data.describe().drop(columns=['userID', 'itemID'])[:2]
 
 st.dataframe(df_train_data_selected)
+
+# -------------- DOWNLOAD BUTTON -----------------
+st.markdown(filedownload(df_train_data_selected, "Group8 - MovieLens 100k Dataset.csv"), unsafe_allow_html=True)
+
 st.write('Description: ')
 st.dataframe(des)
 
@@ -155,9 +159,6 @@ genre_bar_chart = [(len(train_data[train_data['genre'] == genre]))for genre in g
 genre_bar_chart = pd.DataFrame(np.array(genre_bar_chart).reshape(1, len(genre_data)), columns=genre_data)
 st.bar_chart(genre_bar_chart)
 
-
-# -------------- DOWNLOAD BUTTON -----------------
-st.markdown(filedownload(df_train_data_selected, "Group8 - MovieLens 100k Dataset.csv"), unsafe_allow_html=True)
 
 # -------------- TRAINING LOSS LINE CHART-----------------
 st.header('Training Loss')
@@ -169,7 +170,7 @@ st.write('MLP Model training loss\'s really weird (is a line) but NeuMF is still
 st.line_chart(pd.DataFrame(np.array([mlp_error]).T, columns=["MLP"]))
 
 st.subheader("NeuMF & GMF Model")
-st.write('NeuMF & GMF Model has the training loss convergence (exactly same as paper')
+st.write('NeuMF & GMF Model has the training loss convergence (exactly same as paper)')
 st.line_chart(pd.DataFrame(np.array([gmf_error, neumf_error]).T, columns=["GMF", "NeuMF"]))
 
 st.header("Evaluation Metrics")

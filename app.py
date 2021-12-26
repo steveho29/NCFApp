@@ -3,6 +3,7 @@
     @Since: 12/24/2021 3:12 PM
 """
 import copy
+import json
 
 import streamlit as st
 import pandas as pd
@@ -18,7 +19,8 @@ model = NCFModel()
 
 st.title('Group 8')
 st.markdown("""
-* 19127368 - Hồ Ngọc Minh Đức
+* **Deployed by: Hồ Ngọc Minh Đức - 19127368**
+\n**Other members:** 
 * 19127353 - Lê Tấn Đạt
 * 19127429 - Trần Tuấn Kha
 * 19127651 - Trần Anh Túc
@@ -32,7 +34,7 @@ This projects use Movielens 100K dataset!
 * **Model reference:** [github.com/microsoft](https://github.com/microsoft/recommenders)
 """)
 
-st.sidebar.header('User Input Features')
+st.sidebar.header('Filter Dataset')
 
 
 # ----------------- SEARCH MOVIE FROM IMDB STARTS HERE-----------------
@@ -160,8 +162,21 @@ st.markdown(filedownload(df_train_data_selected, "Group8 - MovieLens 100k Datase
 st.header('Training Loss')
 neumf_error = np.load('Error_neumf.npy')
 gmf_error = np.load('Error_gmf.npy')
+mlp_error = np.load("Error_mlp.npy")
+st.subheader("MLP Model")
+st.write('MLP Model training loss\'s really weird (is a line) but NeuMF is still correct')
+st.line_chart(pd.DataFrame(np.array([mlp_error]).T, columns=["MLP"]))
+st.write('GMF & NEUMF Model has the training loss convergence (exactly same as paper')
 st.line_chart(pd.DataFrame(np.array([gmf_error, neumf_error]).T, columns=["GMF", "NeuMF"]))
 
+st.header("Evaluation Metrics")
+metrics = {}
+metric_columns = []
+for modelType in ['neumf', 'gmf', 'mlp']:
+    metric = json.load(open('metrics_'+modelType+'.json'))
+    metric_columns = metric.keys()
+    metrics[modelType] = metric.values()
+st.dataframe(pd.DataFrame.from_dict(metrics, orient='index', columns=metric_columns))
 
 # Heatmap
 # if st.button('Intercorrelation Heatmap'):
@@ -177,7 +192,7 @@ st.line_chart(pd.DataFrame(np.array([gmf_error, neumf_error]).T, columns=["GMF",
 #         ax = sns.heatmap(corr, mask=mask, vmax=1, square=True)
 #     st.pyplot()
 
-st.sidebar.header('Recommendation')
+st.sidebar.header('Choose User to recommend movie')
 selected_user = st.sidebar.selectbox('UserID', sorted(train_data['userID'].unique()))
 
 recommendations = model.get_recommendations(selected_user, 5)
@@ -186,7 +201,7 @@ isShowImage = st.sidebar.checkbox('Show Movie Image')
 # isShowMovieDescription = st.sidebar.checkbox('Show Movie Description')
 
 
-st.header("Recommendation")
+st.header("Applying model for Recommendation")
 st.write("Use recommendation option in sidebar to see the model working ")
 for i, (itemID, value) in enumerate(recommendations):
     # urls = [urllib.parse.unquote(url.replace("http://us.imdb.com/M/title-exact?", "")) for url in item_data[item_data['itemID'] == itemID]['url'].tolist()]

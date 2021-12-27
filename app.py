@@ -13,7 +13,7 @@ import PIL.Image as Image
 import requests
 import io
 from NCFModel import NCFModel
-
+from imdb_request import get_film_info, get_title_id
 model = NCFModel()
 
 st.set_page_config(
@@ -39,76 +39,6 @@ This projects use Movielens 100K dataset!
 """)
 
 st.sidebar.header('Filter Dataset')
-
-
-# ----------------- SEARCH MOVIE FROM IMDB STARTS HERE-----------------
-def get_title_id(keyword):
-    # make request
-    url = "https://imdb8.p.rapidapi.com/title/find"
-
-    querystring = {"q": keyword}
-
-    headers = {
-        'x-rapidapi-host': "imdb8.p.rapidapi.com",
-        'x-rapidapi-key': "f2f10f172bmsha20bd8a1ec49a60p13faacjsnb0e48d191ce7"
-    }
-
-    response = requests.request("GET", url, headers=headers, params=querystring)
-    data = response.json()
-    # get the title id
-    first_index = data["results"][0]
-    id = first_index["id"]
-    image_url = first_index["image"]["url"]
-    name = first_index["title"]
-    info = {"Name": name, "Image": image_url}
-    return id.strip('/').split('/')[1], info
-
-
-
-def get_film_info(title_id):
-    # make request
-    url = "https://imdb8.p.rapidapi.com/title/get-full-credits"
-
-    querystring = {"tconst": title_id}
-
-    headers = {
-        'x-rapidapi-host': "imdb8.p.rapidapi.com",
-        'x-rapidapi-key': "f2f10f172bmsha20bd8a1ec49a60p13faacjsnb0e48d191ce7"
-    }
-
-    response = requests.request("GET", url, headers=headers, params=querystring)
-    data = response.json()
-    info = {"Actors": [], "Writers": [], "Directors": []}
-
-    # get actors
-    for actor in data["cast"][0:3]:
-        info["Actors"].append(actor["name"])
-    # get writers
-    for writer in data["crew"]["writer"]:
-        info["Writers"].append(writer["name"])
-        if len(info["Writers"]) == 3:
-            break
-    # get directors
-    info["Directors"].append(data["crew"]["director"][0]["name"])
-
-    return info
-
-
-def get_plot(title_id):
-    url = "https://imdb8.p.rapidapi.com/title/get-plots"
-
-    querystring = {"tconst": title_id}
-
-    headers = {
-        'x-rapidapi-host': "imdb8.p.rapidapi.com",
-        'x-rapidapi-key': "f2f10f172bmsha20bd8a1ec49a60p13faacjsnb0e48d191ce7"
-        }
-
-    response = requests.request("GET", url, headers=headers, params=querystring)
-
-    return response.json()["plots"][0]["text"]
-
-# ----------------- SEARCH MOVIE FROM IMDB ENDS HERE-----------------
 
 
 def filedownload(df, name):
@@ -221,14 +151,15 @@ for i, (itemID, value) in enumerate(recommendations):
         """)
     if isShowImage:
         try:
-            search_res = get_title_id(title)
-            if search_res:
-                id, info = search_res
-                info.update(get_film_info(id))
-                info["Plot"] = get_plot(id)
-                st.image(getImage(info["Image"]), width=200)
+            id = get_title_id(title)
+            print(id)
+            if id:
+                info = get_film_info(id)
+                print(info)
+                st.image(getImage(info["Poster"]), width=200)
                 st.write(info)
-        except:
+        except Exception as e:
+            # print(e)
             st.write("IMDB server search not found!")
 
 

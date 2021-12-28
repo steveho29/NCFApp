@@ -94,17 +94,21 @@ st.bar_chart(genre_bar_chart)
 
 
 # -------------- TRAINING LOSS LINE CHART-----------------
-st.header('Training Loss')
+st.header('Training Loss 100 Epochs')
 neumf_error = np.load('Error_neumf.npy')
 gmf_error = np.load('Error_gmf.npy')
 mlp_error = np.load("Error_mlp.npy")
-st.subheader("MLP Model")
-st.write('MLP Model training loss\'s really weird (is a line) but NeuMF is still correct')
-st.line_chart(pd.DataFrame(np.array([mlp_error]).T, columns=["MLP"]))
+mlp_sigmoid_error = np.load("Error_mlp_sigmoid.npy")
+st.subheader("MLP Model with ReLU activation function")
+st.write('MLP with ReLu has training loss\'s really weird (is a line)')
+st.line_chart(pd.DataFrame(np.array([mlp_error]).T, columns=["MLP with ReLU"]))
 
-st.subheader("NeuMF & GMF Model")
-st.write('NeuMF & GMF Model has the training loss convergence (exactly same as paper)')
-st.line_chart(pd.DataFrame(np.array([gmf_error, neumf_error]).T, columns=["GMF", "NeuMF"]))
+st.subheader("MLP Model with Sigmoid activation function")
+st.line_chart(pd.DataFrame(mlp_sigmoid_error.T, columns=["MLP with Sigmoid"]))
+
+st.subheader("NeuMF & MLP (Sigmoid) & GMF Model")
+st.write('NeuMF & MLP & GMF Model has the training loss convergence (exactly same as paper)')
+st.line_chart(pd.DataFrame(np.array([gmf_error, mlp_sigmoid_error, neumf_error]).T, columns=["GMF", "MLP", "NeuMF"]))
 
 st.header("Evaluation Metrics")
 metrics = {}
